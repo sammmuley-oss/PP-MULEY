@@ -1,15 +1,6 @@
 import { StorageKeys, Service, Project, Lead } from "../types";
 import { INITIAL_SERVICES, INITIAL_PROJECTS } from "../constants";
-
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  updateDoc, 
-  deleteDoc,
-  doc 
-} from "firebase/firestore";
-
+import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { firestore } from "./firebase";
 
 export class StorageService {
@@ -36,40 +27,6 @@ export class StorageService {
     }
   }
 
-  private get<T>(key: StorageKeys): T[] {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : [];
-  }
-
-  private save<T>(key: StorageKeys, data: T[]) {
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-
-  // SERVICES
-  public getServices(): Service[] {
-    return this.get<Service>(StorageKeys.SERVICES);
-  }
-
-  public deleteService(id: string) {
-    this.save(
-      StorageKeys.SERVICES,
-      this.getServices().filter(s => s.id !== id)
-    );
-  }
-
-  // PROJECTS
-  public getProjects(): Project[] {
-    return this.get<Project>(StorageKeys.PROJECTS);
-  }
-
-  public deleteProject(id: string) {
-    this.save(
-      StorageKeys.PROJECTS,
-      this.getProjects().filter(p => p.id !== id)
-    );
-  }
-
-  // LEADS (FIREBASE)
   public async getLeads(): Promise<Lead[]> {
     const snapshot = await getDocs(collection(firestore, "leads"));
     return snapshot.docs.map(d => ({ id: d.id, ...(d.data() as Lead) }));
@@ -83,16 +40,9 @@ export class StorageService {
     await updateDoc(doc(firestore, "leads", id), { status });
   }
 
-  // NEW: DELETE ONE LEAD
+  // 🔥 NEW — Delete Lead
   public async deleteLead(id: string) {
     await deleteDoc(doc(firestore, "leads", id));
-  }
-
-  // OPTIONAL: DELETE ALL LEADS (if you want later)
-  public async deleteAllLeads() {
-    const snapshot = await getDocs(collection(firestore, "leads"));
-    const deletions = snapshot.docs.map(d => deleteDoc(d.ref));
-    await Promise.all(deletions);
   }
 }
 
