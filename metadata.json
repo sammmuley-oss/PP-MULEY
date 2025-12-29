@@ -1,0 +1,7 @@
+{
+  "name": "P. P. Muley & Co. - Heavy Equipment Handling",
+  "description": "Professional website for PANDHARINATH P. MULEY (P. P. MULEY & CO.), specializing in heavy machinery handling and industrial services.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
