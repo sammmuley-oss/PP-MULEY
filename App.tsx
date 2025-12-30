@@ -8,14 +8,27 @@ import { Gallery } from './pages/Gallery';
 import { Contact } from './pages/Contact';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { Login } from './pages/Login';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./services/firebase";
+import { useEffect, useState } from "react";
 
 // Protected Route
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const isAdmin = localStorage.getItem("admin_logged_in") === "true";
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
 
-  if (!isAdmin) {
-    return <Navigate to="/login" replace />;
-  }
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+      setLoading(false);
+    });
+
+    return () => unsub();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
+  if (!user) return <Navigate to="/login" replace />;
 
   return <>{children}</>;
 };

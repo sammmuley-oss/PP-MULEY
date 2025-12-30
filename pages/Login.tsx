@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, User, Eye, EyeOff } from "lucide-react";
 import { storage } from "../services/storage";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../services/firebase";
 
 export const Login: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -10,17 +12,20 @@ export const Login: React.FC = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
 
-    // Simple authentication demo
-    if (username === "admin" && password === "ppmuley123") {
-      localStorage.setItem("admin_logged_in", "true");
-      navigate("/admin");
-    } else {
-      setError("Invalid username or password");
-    }
-  };
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError("");
+
+  try {
+    await signInWithEmailAndPassword(auth, username, password);
+    navigate("/admin");
+  } catch (err) {
+    setError("Invalid username or password");
+  }
+};
+
+
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 px-4">

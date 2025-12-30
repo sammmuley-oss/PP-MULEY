@@ -1,4 +1,3 @@
-
 export interface Service {
   id: string;
   title: string;
@@ -8,10 +7,22 @@ export interface Service {
 
 export interface Project {
   id: string;
+  id: string;
   title: string;
   category: string;
   imageUrl: string;
   date: string;
+}
+
+export interface Invoice {
+  id: string;
+  company: string;
+  invoiceNumber: string;
+  amount: number;
+  status: "paid" | "pending" | "partial";
+  date: number;
+  pdfUrl: string;
+  notes?: string;
 }
 
 export interface Lead {
