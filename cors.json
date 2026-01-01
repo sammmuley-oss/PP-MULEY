@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://pp-muley-company.web.app"],
+    "responseHeader": ["Content-Type", "Authorization"],
+    "method": ["GET", "PUT", "POST", "DELETE", "HEAD"],
+    "maxAgeSeconds": 3600
+  }
+]
